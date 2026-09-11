@@ -112,8 +112,8 @@ suppressMessages(library(patchwork))
 fig <- (pA + common) + (pB + common + theme(legend.position = "none")) +
   plot_layout(guides = "keep") +
   plot_annotation(
-    title = "Is 10 points of pain always 10 points? The method works; the data do not exist.",
-    subtitle = "Latent pain spanned by a 10 point interval on the 0 to 100 VAS, normalized so an equal interval scale reads 10.\nLeft: 12 simulated cohorts where the display compresses the top by construction; the estimator recovers it.\nRight: the single dataset out of 4,567 papers with item level pain responses. The spike sits exactly in its coverage gap.",
+    title = "Is 10 points of pain always 10 points? The method works; the shared data cannot carry it.",
+    subtitle = "Latent pain spanned by a 10 point interval on the 0 to 100 VAS, normalized so an equal interval scale reads 10.\nLeft: 12 simulated cohorts where the display compresses the top by construction; the estimator recovers it.\nRight: the single dataset out of 4,567 papers with item level pain responses. Its curve rises through a stretch of the scale where it has no data.",
     caption = "Latent pain estimated by item response models fitted to a multi item pain instrument, excluding the VAS. Thin lines are cohorts, bold lines medians.\nPanel B band is a 150 replicate participant level bootstrap, 10th to 90th percentile. Note the panels use different y ranges: B reaches 34, A only 18.\nPanel B is not evidence about the VAS. It is evidence about the data supply.",
     theme = theme(
       plot.background = element_rect(fill = SURF, colour = NA),

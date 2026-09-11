@@ -1,10 +1,11 @@
 "stage","n"
 "Unique PMC records",4570
 "Full text processed",4567
-"Detected sharing data",493
-"Detected sharing code",36
+"Data availability statement detected",493
+"Code sharing detected",36
 "With repository link",41
-"Tabular files recovered",77
+"Tabular files retrieved",102
+"Tabular files readable",77
 "Tables scored",161
 "Shortlisted for review",60
 "Item level pain instrument",2

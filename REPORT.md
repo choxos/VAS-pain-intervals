@@ -17,10 +17,10 @@ actually spans at each point on the scale.
 The method works. It was validated against simulated data where the display's
 nonlinearity is known by construction, and it recovers the true curve.
 
-The data do not exist in the published literature. Of **4,567** open access
-papers that use a VAS for pain alongside a named multi item pain instrument,
-**493** share data, and **two** share the item level responses an item response
-model requires. Neither of those two can carry the analysis. The rest share
+The shared data cannot carry it. Of **4,567** open access papers that use a VAS
+for pain alongside a named multi item pain instrument, **493** carry a data
+availability statement, and **two** share the item level responses an item
+response model requires. Neither of those two can carry the analysis. The rest share
 subscale and instrument totals, which cannot be modeled.
 
 This is a real finding about the research record rather than a failure of the
@@ -55,14 +55,28 @@ mandatory data policies were already fully inside the net.
 Every record's full text XML was downloaded and passed through
 `rtransparency::rt_data_code_pmc()`. 4,567 were processed successfully.
 
-| | n | % |
+| | n | % of screened |
 |---|---:|---:|
 | Papers screened | 4,567 | 100% |
-| Detected as sharing data | 493 | 10.8% |
-| Detected as sharing code | 36 | 0.8% |
+| Data availability statement detected | 493 | 10.8% |
+| Code sharing detected | 36 | 0.8% |
 | With a repository link (figshare, OSF, Zenodo, Dryad) | 41 | 0.9% |
 
-Sharing has risen steadily, from zero detected in 2012 and 2013 to 16.5% in 2026.
+Detection has risen steadily, from zero in 2012 and 2013 to 16.5% in 2026.
+
+**What those 493 statements actually say matters more than the count.** The
+detector reports that an availability statement exists, not that usable data sit
+behind it:
+
+| Statement type | n | % of the 493 |
+|---|---:|---:|
+| In the article or its supplement | 324 | 65.7% |
+| Other wording | 130 | 26.4% |
+| Names a repository or accession | 39 | 7.9% |
+
+Two thirds point at the article itself, which is exactly where screening then
+found subscale totals rather than item responses. Any headline rate quoted from
+this corpus should say "availability statement detected", not "data shared".
 
 ![Data sharing trend](out/figures/fig2_sharing_trend.png)
 
@@ -70,8 +84,9 @@ Sharing has risen steadily, from zero detected in 2012 and 2013 to 16.5% in 2026
 
 Supplementary bundles were pulled from the Europe PMC `supplementaryFiles`
 endpoint for every flagged paper, and repository links were resolved through the
-figshare, Zenodo, OSF and Dryad APIs. **77 tabular files** were recovered and
-**161 tables** scored, counting every sheet of every workbook separately.
+figshare, Zenodo, OSF and Dryad APIs. **102 tabular files** were retrieved, **77**
+of them machine readable, yielding **161 tables** once every sheet of every
+workbook was scored separately.
 
 Screening scores tables on *shape* rather than column name regexes, because real
 shared files name the rating `PI`, `pain0` or `NRS` at least as often as `VAS`. A
@@ -121,9 +136,9 @@ independent of the VAS display, so this one is admissible in principle.
 **Underpowered and badly covered.** Baseline VAS spans only 60 to 90; six week
 VAS spans 1 to 55. Neither occasion alone covers enough of the scale to fit a
 curve. Stacking both occasions covers 1 to 90 but leaves a hole between 55 and
-60, and the fitted curve spikes from 8.3 to 24.5 **exactly at that seam**, with a
-bootstrap band running from 12.9 to 32.2. That is the occasion gap, not scale
-geometry.
+60. The fitted curve climbs from 8.3 to 24.5 as it crosses that empty stretch,
+peaking just beyond it, with a bootstrap band running from 12.9 to 32.2. That is
+the occasion gap, not scale geometry.
 
 r(theta, VAS) = 0.66, which passes the construct check. Everything else fails.
 
@@ -139,8 +154,9 @@ construction. The estimator recovers the true curve: it reads about 13 near VAS
 is the validation that the pipeline measures what it claims to.
 
 **Panel B** is PMC10695107. It is shown because the honest output of this stage
-is the yield, not a curve. The spike sits in the coverage gap and the band is
-wider than the effect anyone would want to report.
+is the yield, not a curve. The rise runs straight through a stretch of the scale
+where the dataset has no observations, and the band is wider than any effect
+worth reporting.
 
 ---
 
@@ -193,6 +209,12 @@ Three routes remain, in order of cost:
    sample sizes three orders of magnitude above anything here. Both need a data
    use agreement rather than a download. This is the fastest route to the figure.
 
+   A direct search of Zenodo, Dryad and OSF by instrument name
+   (`R/08_repo_search.R`, results in `out/repo_search_hits.csv`) surfaced five
+   further human pain datasets worth opening by hand, including a Dryad deposit
+   on staged bilateral knee arthroplasty pain and an OSF item content analysis of
+   the Brief Pain Inventory interference subscale.
+
 2. **Ask the two authors.** PMC10695107 has admissible items and only needs more
    participants; the same group may hold more.
 
@@ -223,6 +245,7 @@ Rscript R/02_flag.R            # XML download, rtransparency detection
 Rscript R/02b_flag_extra.R
 Rscript R/03_screen.R          # supplements, shape scoring, review list
 Rscript R/03b_repos.R          # figshare, Zenodo, OSF, Dryad
+Rscript R/08_repo_search.R     # direct repository search by instrument
 Rscript R/04_interval_curve.R  # estimator plus self check
 Rscript R/07_run.R             # curated analysis
 Rscript R/09_figures.R         # figures 1 to 3
@@ -230,4 +253,4 @@ Rscript R/10_figure_main.R     # main figure
 ```
 
 `data/` is gitignored. Downloaded datasets stay local and keep their original
-licences and citations.
+licenses and citations.

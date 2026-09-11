@@ -38,7 +38,11 @@ catastrophizing, or theta is a different construct and the curve means nothing.
 | `R/03_screen.R` | Pull supplementary bundles, score every table and Excel sheet, emit a ranked review list |
 | `R/03b_repos.R` | Follow figshare, Zenodo, OSF and Dryad links and download tabular files |
 | `R/04_interval_curve.R` | IRT plus monotone spline estimator, with a synthetic data self check |
-| `R/05_figure.R` | The PISA style figure |
+| `R/05_figure.R` | Figure helpers |
+| `R/07_run.R` | Curated analysis of the admissible dataset |
+| `R/08_repo_search.R` | Direct Zenodo, Dryad and OSF search by instrument |
+| `R/09_figures.R` | Funnel, sharing trend and granularity figures |
+| `R/10_figure_main.R` | The PISA style figure |
 
 Run `Rscript R/04_interval_curve.R` on its own to execute the self check: it
 simulates a display with known compression at the top and asserts the estimator
@@ -55,7 +59,14 @@ The curve measures VAS intervals relative to the IRT logit metric. That metric
 is itself a modeling choice, the same assumption the PISA plot makes. It is the
 comparison that is informative, not the absolute units.
 
+## Results
+
+Stage 1 is complete and written up in [REPORT.md](REPORT.md), with figures in
+`out/figures/` and tables in `out/`. Headline: of 4,567 open access papers,
+493 carry a data availability statement and two share the item level responses
+the method needs. Neither of the two can carry the analysis.
+
 ## Data
 
 `data/` is gitignored. Downloaded datasets stay local and keep their original
-licences and citations.
+licenses and citations.

@@ -33,13 +33,13 @@ scr <- readRDS("data/screen.rds")
 # almost empty.
 fun <- tibble(
   stage = factor(c("Open access papers\nscreened",
-                   "Detected as sharing data",
-                   "Tabular data files\nrecovered",
+                   "Data availability statement\ndetected",
+                   "Readable tabular\ndata files",
                    "Files with a plausible\npain data shape",
                    "Item level pain\ninstrument"),
                  levels = rev(c("Open access papers\nscreened",
-                                "Detected as sharing data",
-                                "Tabular data files\nrecovered",
+                                "Data availability statement\ndetected",
+                                "Readable tabular\ndata files",
                                 "Files with a plausible\npain data shape",
                                 "Item level pain\ninstrument"))),
   n = c(4567, 493, 77, 60, 2))
@@ -58,9 +58,9 @@ p1 <- ggplot(fun, aes(n, stage)) +
                      labels = c("1", "10", "100", "1,000", "10,000"),
                      expand = c(0, 0)) +
   labs(title = "Pain data is shared. Item level pain data is not.",
-       subtitle = "Europe PMC open access papers using a visual analogue scale for pain alongside a named\nmulti item pain instrument. Data sharing detected with rtransparency. Log scale.",
+       subtitle = "Europe PMC open access papers using a visual analogue scale for pain alongside a named\nmulti item pain instrument. Availability statements detected with rtransparency. Log scale.",
        x = "Number of records (log scale)", y = NULL,
-       caption = "Two of 4,567 papers shared the item level responses an item response model needs.\nEverything else shared subscale or instrument totals, which cannot be modeled.") +
+       caption = "Two of 4,567 papers shared the item level responses an item response model needs.\nEverything else shared subscale or instrument totals, which cannot be modeled.\nOnly 39 of the 493 availability statements named a repository or accession; 324 said the data are in the article.") +
   base_theme + theme(panel.grid.major.y = element_blank())
 ggsave("out/figures/fig1_funnel.png", p1, width = 9.5, height = 5.4, dpi = 200, bg = SURF)
 
@@ -74,10 +74,10 @@ p2 <- ggplot(yr, aes(y, pct)) +
   scale_x_continuous(breaks = seq(2012, 2026, 2)) +
   scale_y_continuous(limits = c(0, 20), expand = expansion(mult = c(0, 0.05)),
                      labels = function(x) paste0(x, "%")) +
-  labs(title = "Data sharing in VAS pain research rose from nothing to one paper in six",
-       subtitle = "Share of open access pain papers with a detected data sharing statement or repository deposit,\nby publication year. 4,567 papers, detection by rtransparency.",
+  labs(title = "Detected data availability statements rose from nothing to one paper in six",
+       subtitle = "Share of open access pain papers carrying a detected data availability statement or repository deposit,\nby publication year. 4,567 papers, detection by rtransparency. Most statements point at the article itself,\nnot at a repository: only 39 of 493 named a repository or accession.",
        x = NULL, y = "Papers sharing data",
-       caption = "2026 is a partial year. Detection identifies that data were shared, not that the data are usable.") +
+       caption = "2026 is a partial year. Detection identifies that a statement exists, not that usable data are behind it.") +
   base_theme
 ggsave("out/figures/fig2_sharing_trend.png", p2, width = 9.5, height = 5, dpi = 200, bg = SURF)
 
@@ -108,7 +108,7 @@ p3 <- ggplot(cl, aes(n, forcats::fct_rev(class), fill = class)) +
   labs(title = "What shared pain datasets actually contain",
        subtitle = "The 60 shortlisted tables, classified by the finest grain of pain measurement present.\nOnly the top category can support an item response model.",
        x = "Tables", y = NULL,
-       caption = "Shortlist drawn from 77 tabular files recovered from supplements and repositories.") +
+       caption = "Shortlist drawn from 102 tabular files retrieved from supplements and repositories, 77 of them readable.") +
   base_theme + theme(panel.grid.major.y = element_blank())
 ggsave("out/figures/fig3_granularity.png", p3, width = 9.5, height = 4.4, dpi = 200, bg = SURF)
 
