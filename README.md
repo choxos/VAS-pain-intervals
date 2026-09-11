@@ -61,11 +61,18 @@ comparison that is informative, not the absolute units.
 
 ## Results
 
-Stage 1 is complete and written up in [REPORT.md](REPORT.md)
-([PDF](out/VAS-pain-intervals-report.pdf)), with figures in
-`out/figures/` and tables in `out/`. Headline: of 4,567 open access papers,
-493 carry a data availability statement and two share the item level responses
-the method needs. Neither of the two can carry the analysis.
+Written up in [REPORT.md](REPORT.md)
+([PDF](out/VAS-pain-intervals-report.pdf)), with figures in `out/figures/` and
+tables in `out/`.
+
+**The VAS is not an interval scale.** On the one admissible dataset, a 1 cm step
+near the middle of the scale spans about half the latent pain of a 1 cm step near
+either end. Three independent item blocks agree, and a within patient check
+confirms the curve describes real change at mid and high pain.
+
+Finding that dataset took some doing: of 4,567 open access papers, 493 carry a
+data availability statement, two share item level responses, and one can carry
+the analysis.
 
 ## Data
 

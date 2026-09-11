@@ -2,3 +2,4 @@ data/
 out/*.rds
 .Rhistory
 .RData
+.DS_Store

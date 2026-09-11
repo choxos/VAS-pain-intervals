@@ -57,10 +57,10 @@ p1 <- ggplot(fun, aes(n, stage)) +
                      breaks = c(1, 10, 100, 1000, 10000),
                      labels = c("1", "10", "100", "1,000", "10,000"),
                      expand = c(0, 0)) +
-  labs(title = "Pain data is shared. Item level pain data is not.",
+  labs(title = "Pain data is shared. Item level pain data almost never is.",
        subtitle = "Europe PMC open access papers using a visual analogue scale for pain alongside a named\nmulti item pain instrument. Availability statements detected with rtransparency. Log scale.",
        x = "Number of records (log scale)", y = NULL,
-       caption = "Two of 4,567 papers shared the item level responses an item response model needs.\nEverything else shared subscale or instrument totals, which cannot be modeled.\nOnly 39 of the 493 availability statements named a repository or accession; 324 said the data are in the article.") +
+       caption = "Two of 4,567 papers shared the item level responses an item response model needs, and one of those two can carry the analysis.\nEverything else shared subscale or instrument totals, which cannot be modeled.\nOnly 39 of the 493 availability statements named a repository or accession; 324 said the data are in the article.") +
   base_theme + theme(panel.grid.major.y = element_blank())
 ggsave("out/figures/fig1_funnel.png", p1, width = 9.5, height = 5.4, dpi = 200, bg = SURF)
 
