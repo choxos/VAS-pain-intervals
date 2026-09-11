@@ -10,11 +10,12 @@ suppressMessages({
   library(readr); library(readxl); library(haven); library(tidyr)
   library(future); library(furrr)
 })
-plan(multisession, workers = 4)
+plan(multisession, workers = 3)
 
-flags_path <- if (file.exists("data/flags.rds") && file.size("data/flags.rds") > 5000)
-  "data/flags.rds" else "data/flags_partial.rds"
-flags <- readRDS(flags_path)
+flags <- bind_rows(lapply(
+  Filter(function(f) file.exists(f) && file.size(f) > 5000,
+         c("data/flags.rds", "data/flags_extra.rds")),
+  readRDS))
 
 dir.create("data/supp", showWarnings = FALSE, recursive = TRUE)
 dir.create("out", showWarnings = FALSE)
@@ -128,8 +129,9 @@ names(supp) <- pull
 files <- tibble(pmcid = rep(names(supp), lengths(supp)), file = unlist(supp))
 
 # Repository files, if 03b has run.
-if (file.exists("data/repo_files.rds")) {
-  files <- bind_rows(files, readRDS("data/repo_files.rds") |> select(pmcid, file))
+rf <- if (file.exists("data/repo_files.rds")) readRDS("data/repo_files.rds") else NULL
+if (!is.null(rf) && nrow(rf) && all(c("pmcid", "file") %in% names(rf))) {
+  files <- bind_rows(files, rf |> select(pmcid, file))
 }
 files <- distinct(files, file, .keep_all = TRUE)
 message("tabular files to score: ", nrow(files))

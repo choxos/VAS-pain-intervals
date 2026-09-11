@@ -22,7 +22,17 @@ fit_theta <- function(items, model = c("graded", "rasch")) {
   itemtype <- if (model == "graded") "graded" else "Rasch"
   fit <- mirt::mirt(items, model = 1, itemtype = itemtype, verbose = FALSE,
                     technical = list(NCYCLES = 2000))
-  as.numeric(mirt::fscores(fit, method = "EAP"))
+  # WLE rather than EAP. EAP shrinks toward the prior mean, and hardest where
+  # test information is low, which is the tails. That would flatten f at both
+  # ends of the VAS and manufacture compression the scale does not have.
+  th <- try(as.numeric(mirt::fscores(fit, method = "WLE")), silent = TRUE)
+  if (inherits(th, "try-error") || !all(is.finite(th))) {
+    th <- as.numeric(mirt::fscores(fit, method = "EAP"))
+    attr(th, "scorer") <- "EAP"
+  } else {
+    attr(th, "scorer") <- "WLE"
+  }
+  th
 }
 
 # Monotone increasing spline of theta on displayed score, then first differences.
