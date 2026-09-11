@@ -78,7 +78,7 @@ Two thirds point at the article itself, which is exactly where screening then
 found subscale totals rather than item responses. Any headline rate quoted from
 this corpus should say "availability statement detected", not "data shared".
 
-![Data sharing trend](out/figures/fig2_sharing_trend.png)
+![Data sharing trend](out/figures/fig2_sharing_trend.png){width=full}
 
 ### Retrieval and screening
 
@@ -94,11 +94,11 @@ table scores highly when it holds a wide 0 to 100 column alongside a block of
 small integer columns, which is what an item level pain dataset looks like. That
 produced a ranked review list of **60 tables**, which were then read by hand.
 
-![The funnel](out/figures/fig1_funnel.png)
+![The funnel](out/figures/fig1_funnel.png){width=full}
 
 ### What the 60 shortlisted tables contained
 
-![Granularity](out/figures/fig3_granularity.png)
+![Granularity](out/figures/fig3_granularity.png){width=full}
 
 The shape heuristic did its job as a ranker, but hand review was decisive. Most
 shortlisted tables earned their small integer columns from sex, ASA grade,
@@ -146,8 +146,6 @@ r(theta, VAS) = 0.66, which passes the construct check. Everything else fails.
 
 ## The figure, in the two forms the evidence supports
 
-![Main figure](out/figures/fig4_interval_curve.png)
-
 **Panel A** is 12 simulated cohorts where the display compresses the top by
 construction. The estimator recovers the true curve: it reads about 13 near VAS
 10, dips below 9 through the middle, and climbs back above 14 at the top. This
@@ -156,7 +154,11 @@ is the validation that the pipeline measures what it claims to.
 **Panel B** is PMC10695107. It is shown because the honest output of this stage
 is the yield, not a curve. The rise runs straight through a stretch of the scale
 where the dataset has no observations, and the band is wider than any effect
-worth reporting.
+worth reporting. Read it as a statement about the data supply, not about the VAS.
+
+The figure appears in landscape on the following page.
+
+![Main figure](out/figures/fig4_interval_curve.png){page=landscape}
 
 ---
 
