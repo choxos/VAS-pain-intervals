@@ -1,36 +1,49 @@
 # Is the Visual Analogue Scale an Interval Scale?
 
-## Stage 1: the search, and the first answer
+## Stage 1: the search, one dataset, and a correction
 
-**Date:** 11 September 2026
-**Status:** search and screening complete; one admissible dataset found and analyzed.
+**Date:** 27 September 2026
+**Status:** search and screening complete; one admissible dataset analyzed. An
+earlier version of this report claimed the VAS is not an interval scale. That
+claim does not survive a null simulation and is withdrawn; see Robustness.
 
 ---
 
 ## Summary
 
 The plan was the pain analogue of the PISA score interval plot: estimate latent
-pain from a multi item pain instrument, regress the displayed VAS on it with a
-monotone spline, and show how much latent pain a fixed displayed interval
-actually spans at each point on the scale.
+pain from a multi item pain instrument, relate the displayed VAS to it, and show
+how much latent pain a fixed displayed interval spans at each point on the scale.
 
-**The answer, on the one dataset that could carry it, is that the VAS is not an
-interval scale.** In a 98 patient knee osteoarthritis trial, a 1 cm step near the
-middle of the scale spans about **half** the latent pain of a 1 cm step near
-either end. Three independent item blocks agree, including the Geriatric Pain
-Measure, which is a different instrument from the WOMAC. A patient level
-bootstrap separates the middle of the scale from the low end with no overlap.
+**Three findings survive.**
 
-Getting there was the hard part. Of **4,567** open access papers that use a VAS
-for pain alongside a named multi item pain instrument, **493** carry a data
-availability statement, **two** share the item level responses an item response
-model requires, and **one** of those two can carry the analysis. Everything else
-shares subscale and instrument totals, which cannot be modeled.
+1. **Item level pain data is almost never shared.** Of **4,567** open access
+   papers that use a VAS for pain alongside a named multi item pain instrument,
+   **493** carry a data availability statement, **two** share item level
+   responses, and **one** can carry the analysis.
 
-That scarcity is a real finding about the research record rather than a failure
-of the search, and it is the most useful thing to know before committing to this
-project: the bottleneck is not finding papers, it is that pain researchers
-deposit scores, not responses.
+2. **The quick method manufactures the answer.** On that one dataset, a 98
+   patient knee osteoarthritis trial, the exploratory estimator (regress a
+   latent score on the displayed VAS, then difference the fitted curve) drew a
+   convincing U shape: a 1 cm step mid scale appeared to span half the latent
+   pain of a step near either end. A null simulation with a VAS that is exactly
+   linear in latent pain, given the trial's real 27 percent floor, reproduces
+   most of that U through the same pipeline. A marginal likelihood model that
+   treats the VAS as an item shows no U at all. **The headline was mostly an
+   artifact of the floor.**
+
+3. **This trial's VAS was recorded as integer centimeters with uneven use of
+   the numbers.** Counts at 3 and 9 cm run at about half their neighbors, which
+   is consistent with digit preference. That is a property of how this VAS was
+   recorded, not evidence about a continuous 100 mm line.
+
+**What is not answered:** whether a genuinely continuous VAS is an interval
+scale. That needs item level data with the VAS recorded in millimeters, which the
+open literature searched here does not contain.
+
+The practical lesson generalizes beyond pain: anyone reproducing the PISA style
+interval plot on a scale with a floor or ceiling should run a floor matched null
+before reading the curve.
 
 ## What was done
 
@@ -112,114 +125,115 @@ all 161 tables returned **7 hits**, of which 5 were subscale totals.
 
 ---
 
-## The result
-
-### The dataset
+## The one admissible dataset
 
 **Intra-articular ozone versus placebo for knee osteoarthritis**, PLOS ONE
-`pone.0179185`, the same study as PMC5524330 in the corpus. 98 patients,
-assessed at baseline and at 4, 8 and 16 weeks, giving 386 observations. Openly
-downloadable as an XLS supporting file under CC BY.
+`pone.0179185`, the same study as PMC5524330 in the corpus. 98 patients at
+baseline and 4, 8 and 16 weeks, 386 observations, openly downloadable under CC BY.
+On the same people at the same visit it carries a pain VAS stored as integer
+centimeters (so an 11 point scale), the WOMAC as 24 items each on a five category
+Likert response stored as 0, 25, 50, 75 or 100, and the Geriatric Pain Measure
+as 24 items, 22 of them yes or no. Mean VAS falls from 7.3 at baseline to 2.8 at
+16 weeks, and 27 percent of all observations are exactly 0.
 
-It carries, on the same people at the same moment:
+This dataset was rejected in the first screening pass because its WOMAC items
+range from 0 to 100, which was misread as a visual analogue format. The items
+take only five distinct values; the number of distinct values, not the range, was
+the tell.
 
-- a pain **VAS**, recorded as integer centimeters, so it behaves as an 11 point
-  scale rather than a continuous 100 mm line;
-- the **WOMAC** as 24 individual items, each a five category Likert response
-  stored as 0, 25, 50, 75 or 100;
-- the **Geriatric Pain Measure** as 24 individual items, 22 of them yes or no.
+For a measurement question the trial's randomization and blinding are
+irrelevant. What matters is how the VAS was recorded, and the integer storage
+and the floor both turn out to matter a great deal.
 
-Mean VAS falls from 7.3 at baseline to 2.8 at 16 weeks, so the cohort covers
-almost the whole scale rather than piling into one corner.
+## What the exploratory estimator showed
 
-**A correction.** This dataset was in the original corpus, was the top hit from
-the instrument signature scan, and was rejected in the first pass on the grounds
-that its WOMAC items were themselves visual analogue scales. That was an
-inspection error. The items range from 0 to 100 but take only **five distinct
-values**, which is a Likert response rescaled to percent. The number of distinct
-values, not the range, was the tell. The screening pipeline surfaced this dataset
-correctly; the hand review threw it away.
+Latent pain was estimated from WOMAC pain items (and separately from the GPM and
+from all 24 WOMAC items) by weighted likelihood, never using the VAS. A monotone
+spline of that estimate on the VAS was differenced at 1 cm steps and normalized
+so that an equal interval scale reads 1.0:
 
-### How much latent pain does a 1 cm step span?
+| Displayed VAS | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 |
+|---|---:|---:|---:|---:|---:|---:|---:|---:|
+| WOMAC pain | 1.41 | 1.17 | 0.89 | 0.66 | 0.52 | 0.49 | 0.61 | 1.00 |
+| GPM binary | 1.19 | 1.11 | 1.05 | 0.96 | 0.79 | 0.54 | 0.45 | 0.85 |
+
+Three item blocks gave the same U shape, and a patient level bootstrap separated
+the middle of the scale from the low end. The previous version of this report
+published that as the result. It is not.
+
+## Robustness
 
 ![Main figure](out/figures/fig4_interval_curve.png){page=landscape}
 
-Normalized so that an equal interval scale reads 1.0 across the scale:
+Each check below targets a way the curve could appear without the VAS being
+anything other than interval.
 
-| Displayed VAS | WOMAC pain | GPM binary | WOMAC all 24 |
-|---|---:|---:|---:|
-| 1 | 1.41 | 1.19 | 1.32 |
-| 2 | 1.17 | 1.11 | 1.19 |
-| 3 | 0.89 | 1.05 | 0.90 |
-| 4 | 0.66 | 0.96 | 0.62 |
-| 5 | 0.52 | 0.79 | 0.43 |
-| 6 | 0.49 | 0.54 | 0.36 |
-| 7 | 0.61 | 0.45 | 0.52 |
-| 8 | 1.00 | 0.85 | 1.14 |
+**A. Naive null.** A VAS exactly linear in latent pain, real latent distribution,
+real item parameters, same pipeline, 200 patient level resamples. The null curve
+is flat (median 1.00 at every point) and the observed contrast D(1,2) / D(5,6) of
+2.56 exceeds every null replicate. But this null produced 12 percent zeros where
+the data have 27 percent, so it is the wrong null.
 
-The curve is U shaped. A 1 cm step from 5 to 6 carries roughly half the latent
-pain of a 1 cm step from 1 to 2 or from 8 to 9. The patient level bootstrap puts
-VAS 1 at 1.16 to 1.61 and VAS 6 at 0.32 to 0.71, which do not overlap.
+**A2. Floor matched null.** The same linear VAS re-tuned to match the real floor
+(26.9 percent), mean and spread. Now the null itself bends into a U: median D is
+1.80 at 0, 1.08 at 1, 0.70 to 0.79 across 2 to 7, 1.06 at 8 and 1.62 at 9. The
+observed curve leaves the 95 percent null band only at 1, 2, 5 and 6 cm. This
+null also correlates 0.86 with the latent estimate against 0.79 in the real
+data, so it carries less VAS noise than reality and likely understates the
+artifact. **Most of the published U is what a perfectly interval VAS produces on
+data with this floor.** The mechanism: regressing a latent score on a noisy
+displayed score bends the fitted curve wherever the displayed scores pile up.
 
-The three item blocks were chosen to make the finding hard to explain away.
-WOMAC pain is the on construct primary. The GPM binary block is a **separate
-instrument** with a different response format, so its agreement is close to a
-replication rather than a re fit. WOMAC all 24 adds stiffness and function, which
-is off construct and is reported only to show the shape does not depend on which
-items are used. All three correlate 0.77 to 0.80 with the VAS.
+**B. Raw sum scores show the low arm too.** The same curve drawn for each
+instrument's own raw total, against the other instrument's latent metric, is
+steep at the bottom (WOMAC pain sum 2.92, GPM sum 3.46 in the lowest fifth,
+falling toward 1.1 to 1.5 at the top). The low arm of the U is a property of the
+latent reference metric, not of the VAS.
 
-GPM items 19 and 20 are themselves 0 to 10 pain intensity ratings, correlating
-0.998 and 0.882 with the VAS. They are displays, not items, and are excluded.
-Four near constant binary items were also dropped, since an endorsement rate
-below 5 percent gives an unstable slope at this sample size.
+**Within patient change.** Binning every observed VAS drop by its starting value,
+the curve predicted a latent improvement per centimeter of 0.34 from a start of
+0 to 3; patients actually showed 0.15. The low arm fails within people as well.
 
-### Does the curve describe real change?
+**C. The VAS as an anchored item.** The WOMAC pain items were calibrated without
+the VAS, fixed, and the VAS added as an 11 category graded item, so its
+thresholds are estimated by marginal likelihood with latent pain integrated out.
+Relative category widths for 1 to 9 cm: 0.57, 1.04, 0.50, 0.90, 1.41, 0.69,
+1.10, 1.80, 1.13. **No U.** The low versus middle contrast is 0.76 (patient
+bootstrap 95 percent 0.52 to 0.99), the opposite direction from the exploratory
+curve, and 0.97 with an empirical histogram latent density.
 
-98 patients measured four times is a within person design, so the curve can be
-checked against what actually happened to people rather than only against a
-between person contrast. Every observed drop in VAS was binned by its starting
-value, and the latent improvement per 1 cm of displayed drop compared with what
-the cross sectional curve predicts:
+**C1. That estimator is unbiased under the floor matched null.** On 60 simulated
+datasets with a linear VAS and the real floor, it returned widths with medians of
+0.95 to 1.08 and a contrast median of 0.96.
 
-| Starting VAS | n drops | Observed | Predicted by the curve |
-|---|---:|---:|---:|
-| 0 to 3 | 22 | 0.15 | 0.34 |
-| 4 to 6 | 65 | 0.24 | 0.22 |
-| 7 to 10 | 74 | 0.20 | 0.21 |
+**C2, and the limit of C.** Anchoring on the GPM instead of the WOMAC returns
+identical widths (correlation 1.00). That agreement is mechanical rather than a
+replication: the widths correlate 0.976 with a plain normal quantile transform
+of the VAS response counts. With a single highly discriminating item and an
+assumed normal latent density, the thresholds are fixed mostly by the item's own
+response distribution. So C reliably says there is no U; its specific width
+profile mostly restates how often each number was used.
 
-At mid and high starting values the curve predicts within person change well. At
-the floor it over predicts by a factor of two, which is why VAS 0 and 9 are drawn
-faded in the figure: 27 percent of all observations sit at VAS 0, and the
-apparent stretching there mixes the VAS floor with the WOMAC floor. **The
-interior finding does not depend on the endpoints.**
+**How often each number was used.** VAS counts at 0 to 10 cm are 103, 14, 28, 15,
+29, 51, 26, 37, 43, 16, 24. The counts at 3 and 9 cm run at about half the
+average of their neighbors. That is consistent with digit preference in an
+integer recorded scale. The WOMAC pain sum is also lumpy (68 at 0, local peaks at
+4 and 10 of 20), so the claim stays at "consistent with".
 
-The practical consequence is the one that matters for trials. A protocol that
-treats a 1 cm improvement as a fixed quantity is averaging steps that are not the
-same size, and the mismatch is largest between the middle of the scale and its
-ends.
+### The second item level dataset
 
-### The second item level dataset, and why it is not used
-
-**PMC10695107**, knee osteoarthritis, n = 57. Holds the WOMAC pain subscale as
-five genuine 0 to 4 Likert items with a separate 0 to 100 VAS at baseline and six
-weeks. Admissible in principle, but baseline VAS spans only 60 to 90 and six week
-VAS spans 1 to 55. Stacking both occasions leaves a hole between 55 and 60, and
-the fitted curve climbs from 8.3 to 24.5 as it crosses that empty stretch with a
-bootstrap band of 12.9 to 32.2. It is a different display (0 to 100 rather than
-0 to 10) at a fifth of the sample size, so it is not pooled with the ozone trial.
+**PMC10695107**, knee osteoarthritis, n = 57, WOMAC pain as five 0 to 4 Likert
+items and a 0 to 100 VAS at baseline and six weeks. Baseline VAS spans only 60 to
+90 and six week VAS spans 1 to 55; the curve climbs from 8.3 to 24.5 across the
+gap between them with a bootstrap band of 12.9 to 32.2. Not analyzable.
 
 ### Three datasets from a follow up deep research search
 
-Delivered separately in `data/newdata/`, and screened the same way:
-
 | Dataset | Verdict |
 |---|---|
-| PLOS ozone knee OA (`pone.0179185`) | **Admissible.** The analysis above. |
-| Zenodo PEMF versus microwave knee OA (`Public data PEMF.sav`) | Rejected. WOMAC present as `PRE_WOMAC_P`, `_S`, `_F` and `TOTAL` only. Subscale totals, no items. |
-| Figshare tDCS plus exercise knee pain | Rejected. KOOS stored as two percentages, plus four repeated pain ratings and four disability totals. No items. The file is an Excel workbook despite its `.csv` extension. |
-
-Two of the three confirm the pattern the corpus search found: the instruments are
-right, the deposited numbers are scores.
+| PLOS ozone knee OA (`pone.0179185`) | Admissible. The analysis above. |
+| Zenodo PEMF versus microwave knee OA (`Public data PEMF.sav`) | Rejected. WOMAC present as `PRE_WOMAC_P`, `_S`, `_F` and `TOTAL` only. |
+| Figshare tDCS plus exercise knee pain | Rejected. KOOS stored as two percentages, plus repeated pain and disability totals. The file is an Excel workbook despite its `.csv` extension. |
 
 ## Method
 
@@ -240,6 +254,15 @@ right, the deposited numbers are scores.
 5. Rescale so that the mean of D across the 5th to 95th percentile of the
    observed VAS distribution equals 10, so the curve reads directly as a ruler.
    Normalizing over the full 0 to 90 grid would let empty tails dominate.
+
+Steps 1 to 5 are the **exploratory estimator**. On data with a floor it is
+biased, as the Robustness section shows, so any curve it draws must be read
+against a floor matched null. The **preferred estimator** treats the VAS as an
+item: calibrate the anchor instrument without the VAS, fix its parameters, add
+the VAS as a graded item, and read the category widths off its thresholds. Its
+limit is that with one item and an assumed latent density the widths largely
+restate the VAS response distribution, so it is better at ruling a shape out
+than at pinning a width profile down.
 
 Two contamination guards matter. Any column named as a visual analogue scale is
 barred from the item block, and so is any column correlating above 0.95 with the
@@ -265,16 +288,16 @@ Rasch path.
 
 ## What this means for the project
 
-There is now a real result from one trial. What it needs is replication, and the
-corpus search says replication will not come from journal supplements. Three
-routes, in order of cost:
+The interval question is still open. What it needs is a dataset with item level
+responses and a VAS recorded in millimeters, analyzed with the marginal likelihood
+model and checked against a floor matched null. The corpus search says that data
+will not come from journal supplements. Three routes, in order of cost:
 
 1. **Cohorts that deposit item level data by design.** The Osteoarthritis
    Initiative and MOST both hold WOMAC at item level alongside pain ratings, at
    sample sizes three orders of magnitude above this one. Both need a data use
-   agreement rather than a download. This is the fastest route to a second
-   independent curve, and to one measured on a continuous 0 to 100 VAS rather
-   than integer centimeters.
+   agreement rather than a download. Check first whether their pain rating is a
+   continuous VAS or a 0 to 10 numeric scale.
 
    A direct search of Zenodo, Dryad and OSF by instrument name
    (`R/08_repo_search.R`, results in `out/repo_search_hits.csv`) surfaced five
@@ -292,12 +315,6 @@ routes, in order of cost:
    pairwise comparisons, building the latent scale from a Bradley-Terry model
    rather than from another questionnaire. The most convincing version of the
    study and the most expensive.
-
-The single most valuable replication would be on a VAS recorded as a continuous
-100 mm measurement. This trial's VAS was stored as integer centimeters, so what
-is demonstrated is that an 11 point VAS is not an interval scale. Whether a
-genuinely continuous 100 mm line behaves the same way is the obvious next
-question, and the shape of the curve here predicts that it should.
 
 There is also a second paper sitting in this output that needs no new data: of
 4,567 open access pain papers, 10.8 percent carry a data availability statement,
@@ -326,7 +343,10 @@ Rscript R/08_repo_search.R     # direct repository search by instrument
 Rscript R/04_interval_curve.R  # estimator plus self check
 Rscript R/07_run.R             # curated analysis
 Rscript R/09_figures.R         # figures 1 to 3
-Rscript R/11_ozone.R           # the analysis of the admissible dataset
+Rscript R/11_ozone.R           # exploratory estimator on the admissible dataset
+Rscript R/13_robustness.R      # naive null and sum score benchmark
+Rscript R/14_anchored.R        # floor matched null and VAS as an anchored item
+Rscript R/15_anchored_checks.R # anchored estimator under the null, GPM anchor
 Rscript R/12_figure_ozone.R    # the main figure
 ```
 
